@@ -1,0 +1,16 @@
+C:\Users\DarkS\source\repos\Tests\Tests\bin\Debug\netcoreapp3.1\Tests.exe
+C:\Users\DarkS\source\repos\Tests\Tests\bin\Debug\netcoreapp3.1\Tests.deps.json
+C:\Users\DarkS\source\repos\Tests\Tests\bin\Debug\netcoreapp3.1\Tests.runtimeconfig.json
+C:\Users\DarkS\source\repos\Tests\Tests\bin\Debug\netcoreapp3.1\Tests.runtimeconfig.dev.json
+C:\Users\DarkS\source\repos\Tests\Tests\bin\Debug\netcoreapp3.1\Tests.dll
+C:\Users\DarkS\source\repos\Tests\Tests\bin\Debug\netcoreapp3.1\Tests.pdb
+C:\Users\DarkS\source\repos\Tests\Tests\obj\Debug\netcoreapp3.1\Tests.csprojAssemblyReference.cache
+C:\Users\DarkS\source\repos\Tests\Tests\obj\Debug\netcoreapp3.1\Tests.AssemblyInfoInputs.cache
+C:\Users\DarkS\source\repos\Tests\Tests\obj\Debug\netcoreapp3.1\Tests.AssemblyInfo.cs
+C:\Users\DarkS\source\repos\Tests\Tests\obj\Debug\netcoreapp3.1\Tests.dll
+C:\Users\DarkS\source\repos\Tests\Tests\obj\Debug\netcoreapp3.1\Tests.pdb
+C:\Users\DarkS\source\repos\Tests\Tests\obj\Debug\netcoreapp3.1\Tests.genruntimeconfig.cache
+C:\Users\DarkS\source\repos\Tests\Tests\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\DarkS\source\repos\Tests\Tests\bin\Debug\netcoreapp3.1\WebDriver.dll
+C:\Users\DarkS\source\repos\Tests\Tests\obj\Debug\netcoreapp3.1\Tests.csproj.CopyComplete
+C:\Users\DarkS\source\repos\Tests\Tests\obj\Debug\netcoreapp3.1\Tests.csproj.CoreCompileInputs.cache
