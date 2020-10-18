@@ -22,3 +22,4 @@ C:\Users\DarkS\source\repos\Tests\Tests\bin\Debug\netcoreapp3.1\runtimes\win\nat
 C:\Users\DarkS\source\repos\Tests\Tests\bin\Debug\netcoreapp3.1\runtimes\win\native\snappy32.dll
 C:\Users\DarkS\source\repos\Tests\Tests\bin\Debug\netcoreapp3.1\runtimes\win\native\snappy64.dll
 C:\Users\DarkS\source\repos\Tests\Tests\obj\Debug\netcoreapp3.1\Zero_Web_GetGameContent.csproj.CoreCompileInputs.cache
+C:\Users\DarkS\source\repos\Tests\Tests\obj\Debug\netcoreapp3.1\Zero_Web_GetGameContent.csprojAssemblyReference.cache

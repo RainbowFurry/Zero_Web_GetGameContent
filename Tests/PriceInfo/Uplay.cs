@@ -11,18 +11,12 @@ namespace Tests.GeneralInfo
         //PREIS WIRD NICHT GEHOLT
 
         private static IWebDriver driver = Program.driver;
-        private static StoreItem storeItem;
-        private static LanguageContent languageContent;
+        private static ItemPrice price;
 
         public static void StartUplayTest(string searchURL)
         {
 
-            storeItem = new StoreItem();
-            languageContent = new LanguageContent();
-            storeItem.LanguageContents = new LanguageContent[10];
-
-            //ID
-            storeItem.ID = "";
+            price = new ItemPrice();
 
             Console.WriteLine("\n\n");
 
@@ -34,9 +28,7 @@ namespace Tests.GeneralInfo
 
             //Page Info From
             Console.WriteLine("Uplay");
-            storeItem.InfoFrom = "Uplay";
 
-            storeItem.LanguageContents[0] = languageContent;
             Console.WriteLine("\n\n");
 
             //Create DB Entry
@@ -63,10 +55,9 @@ namespace Tests.GeneralInfo
         private static void GetGameInfo()
         {
             Console.WriteLine("Name: " + Functions.FindText("product-name"));//Name
-            storeItem.GameName = Functions.FindText("product-name");
+            //storeItem.GameName = Functions.FindText("product-name");
 
             //Price
-            Price price = new Price();
             if (!Functions.elementExists("deal-percentage"))
             {
                 Console.WriteLine("Preis: " + Functions.FindText("price-sales"));
@@ -85,7 +76,6 @@ namespace Tests.GeneralInfo
                 price.PriceNew = Functions.FindText("standard-price");
                 price.Reduced = Functions.FindText("deal-percentage");
             }
-            storeItem.Price = price;
 
         }
 

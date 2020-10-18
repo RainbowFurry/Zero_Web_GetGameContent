@@ -6,6 +6,8 @@ namespace Zero_Web_GetGameContent.Model
     {
         [BsonId]
         public string ID { get; set; } = "";
+        public string PageName { get; set; }
+        public string PageURL { get; set; }
         public Language[] language { get; set; } = { };
     }
 

@@ -10,18 +10,12 @@ namespace Zero_Web_GetGameContent.GeneralInfo
     {
 
         private static IWebDriver driver = Program.driver;
-        private static StoreItem storeItem;
-        private static LanguageContent languageContent;
+        private static ItemPrice price;
 
         public static void StartInstandGamingTest(string searchURL)
         {
 
-            storeItem = new StoreItem();
-            languageContent = new LanguageContent();
-            storeItem.LanguageContents = new LanguageContent[10];
-
-            //ID
-            storeItem.ID = "";
+            price = new ItemPrice();
 
             Console.WriteLine("\n\n");
 
@@ -33,9 +27,7 @@ namespace Zero_Web_GetGameContent.GeneralInfo
 
             //Page Info From
             Console.WriteLine("InstandGaming");
-            storeItem.InfoFrom = "InstandGaming";
 
-            storeItem.LanguageContents[0] = languageContent;
             Console.WriteLine("\n\n");
 
             //Create DB Entry
@@ -54,10 +46,9 @@ namespace Zero_Web_GetGameContent.GeneralInfo
         private static void GetGameInfo()
         {
             Console.WriteLine("Name: " + driver.FindElement(By.ClassName("title")).FindElement(By.TagName("h1")).Text);//Name
-            storeItem.GameName = driver.FindElement(By.ClassName("title")).FindElement(By.TagName("h1")).Text;
+            //storeItem.GameName = driver.FindElement(By.ClassName("title")).FindElement(By.TagName("h1")).Text;
 
             //Price
-            Price price = new Price();
             if (driver.FindElement(By.ClassName("price")).Text == "N/A")
             {
                 Console.WriteLine("Preis: " + "-");
@@ -76,7 +67,6 @@ namespace Zero_Web_GetGameContent.GeneralInfo
                 price.PriceNew = Functions.FindText("price");
                 price.Reduced = Functions.FindText("discount");
             }
-            storeItem.Price = price;
 
         }
 

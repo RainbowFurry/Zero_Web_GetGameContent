@@ -8,7 +8,6 @@ namespace Zero_Web_GetGameContent.Model
         [BsonId]
         public string ID { get; set; }
         public string GameName { get; set; }
-        public Price Price { get; set; }
         public string GameImage { get; set; }
         public string[] GameImages { get; set; }
         public string Release { get; set; }
@@ -22,7 +21,6 @@ namespace Zero_Web_GetGameContent.Model
         public SystemInfo SystemInfoMin { get; set; }
         public SystemInfo SystemInfoMax { get; set; }
         public string InfoFrom { get; set; }
-        public LanguageContent[] LanguageContents { get; set; }
 
     }
 
@@ -34,23 +32,6 @@ namespace Zero_Web_GetGameContent.Model
         public string RAM { get; set; }
         public string Storage { get; set; }
         public string DirectX { get; set; }
-    }
-
-    public class LanguageContent
-    {
-        public string ShortDescription { get; set; }
-        public string LongDescription { get; set; }
-        public string[] Genre { get; set; }
-        public string[] GameTags { get; set; }
-    }
-
-    public class Price
-    {
-        public string GamePrice { get; set; }
-        public string PriceOld { get; set; }
-        public string PriceNew { get; set; }
-        public string Reduced { get; set; }
-        public bool Free { get; set; }
     }
 
 }

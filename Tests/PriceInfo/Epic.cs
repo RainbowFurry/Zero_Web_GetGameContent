@@ -11,18 +11,14 @@ namespace Tests.GeneralInfo
         //NOCHMAL TESTEN
 
         private static IWebDriver driver = Program.driver;
-        private static StoreItem storeItem;
-        private static LanguageContent languageContent;
+        private static ItemPrice price;
+        //private static LanguageContent languageContent;
 
         public static void StartEpicTest(string searchURL)
         {
 
-            storeItem = new StoreItem();
-            languageContent = new LanguageContent();
-            storeItem.LanguageContents = new LanguageContent[10];
-
-            //ID
-            storeItem.ID = "";
+            price = new ItemPrice();
+            //languageContent = new LanguageContent();
 
             Console.WriteLine("\n\n");
 
@@ -34,12 +30,12 @@ namespace Tests.GeneralInfo
 
             //Page Info From
             Console.WriteLine("Epic");
-            storeItem.InfoFrom = "Epic";
 
-            storeItem.LanguageContents[0] = languageContent;
             Console.WriteLine("\n\n");
 
             //Create DB Entry
+            //PageName
+            //PageLink
             //MongoDBManager.CreateEntry("StoreItemTEMP", storeItem.ToBsonDocument());
 
             Thread.Sleep(2000);
@@ -58,16 +54,15 @@ namespace Tests.GeneralInfo
             if (!Functions.elementExists("css-1cxdtsr-NavigationVertical-styles__subNavLabel"))
             {
                 Console.WriteLine("Name: " + Functions.FindElement("css-1he0b79-NavItemHeading__heading").FindElement(By.TagName("span")).Text);//Name
-                storeItem.GameName = Functions.FindElement("css-1he0b79-NavItemHeading__heading").FindElement(By.TagName("span")).Text;
+                //storeItem.GameName = Functions.FindElement("css-1he0b79-NavItemHeading__heading").FindElement(By.TagName("span")).Text;
             }
             else
             {
                 Console.WriteLine("Name: " + Functions.FindElement("css-1cxdtsr-NavigationVertical-styles__subNavLabel").FindElement(By.TagName("span")).Text);//Name
-                storeItem.GameName = Functions.FindElement("css-1cxdtsr-NavigationVertical-styles__subNavLabel").FindElement(By.TagName("span")).Text;
+                //storeItem.GameName = Functions.FindElement("css-1cxdtsr-NavigationVertical-styles__subNavLabel").FindElement(By.TagName("span")).Text;
             }
 
             //Price
-            Price price = new Price();
             if (!Functions.elementExists("css-tezx95-PurchaseTag__tag-PurchaseTag__shouldUseTheme-PurchaseTag__main"))
             {
                 Console.WriteLine("Preis: " + Functions.FindText("css-csbeaa"));
@@ -86,7 +81,6 @@ namespace Tests.GeneralInfo
                 price.PriceNew = Functions.FindText("css-1u3oa55-Price__discount");
                 price.Reduced = Functions.FindText("css-tezx95-PurchaseTag__tag-PurchaseTag__shouldUseTheme-PurchaseTag__main");
             }
-            storeItem.Price = price;
 
         }
 

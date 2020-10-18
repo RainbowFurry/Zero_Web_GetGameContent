@@ -1,7 +1,9 @@
-﻿using OpenQA.Selenium;
+﻿using MongoDB.Bson;
+using OpenQA.Selenium;
 using System;
 using System.Threading;
 using Tests;
+using Zero_Web_GetGameContent.Manager;
 using Zero_Web_GetGameContent.Model;
 
 namespace Zero_Web_GetGameContent.GeneralInfo
@@ -11,17 +13,24 @@ namespace Zero_Web_GetGameContent.GeneralInfo
 
         private static IWebDriver driver = Program.driver;
         private static StoreItem storeItem;
-        private static LanguageContent languageContent;
+        private static ItemPrice price;
+        private static StoreItemPrice storeItemPrice;
+        private static StoreItemLanguage storeItemLanguage;
+        private static Language language;
 
         public static void StartMicrosoftStoreTest(string searchURL)
         {
 
             storeItem = new StoreItem();
-            languageContent = new LanguageContent();
-            storeItem.LanguageContents = new LanguageContent[10];
+            storeItemPrice = new StoreItemPrice();
+            price = new ItemPrice();
+            storeItemLanguage = new StoreItemLanguage();
+            language = new Language();
 
             //ID
             storeItem.ID = Guid.NewGuid().ToString();
+            storeItemPrice.ID = storeItem.ID;
+            storeItemLanguage.ID = storeItem.ID;
 
             Console.WriteLine("\n\n");
 
@@ -44,11 +53,20 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             //Category REFERENCE!!!!!
             storeItem.Category = "Games";
 
-            storeItem.LanguageContents[0] = languageContent;
             Console.WriteLine("\n\n");
 
             //Create DB Entry
-            //MongoDBManager.CreateEntry("StoreItemTEMP", storeItem.ToBsonDocument());
+            MongoDBManager.CreateEntry("StoreItemTEMP", storeItem.ToBsonDocument());
+            storeItemLanguage.language = new Language[] { language };
+            storeItemLanguage.PageURL = searchURL;
+            storeItemLanguage.PageName = "Steam";
+            MongoDBManager.CreateEntry("StoreItemLanguageTEMP", storeItemLanguage.ToBsonDocument());
+            //MongoDBManager.CreateEntry("StoreItemDLCTEMP", storeItem.ToBsonDocument());
+            //MongoDBManager.CreateEntry("StoreItemBundleTEMP", storeItem.ToBsonDocument());
+            price.PageURL = searchURL;
+            price.PageName = "MicroSoft";
+            storeItemPrice.price = new ItemPrice[] { price };
+            MongoDBManager.CreateEntry("StoreItemPriceTEMP", storeItemPrice.ToBsonDocument());
 
             Thread.Sleep(2000);
 
@@ -94,7 +112,6 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             storeItem.GameName = driver.FindElement(By.Id("DynamicHeading_productTitle")).Text;
 
             //Price
-            Price price = new Price();
             if (!Functions.elementExists("ProductPrice_productPrice_PriceContainer"))
             {
                 if (driver.FindElement(By.Id("ProductPrice_productPrice_PriceContainer")).FindElement(By.TagName("span")).Text == "Free")
@@ -122,7 +139,6 @@ namespace Zero_Web_GetGameContent.GeneralInfo
                 price.PriceNew = driver.FindElement(By.ClassName("price-disclaimer")).FindElement(By.TagName("span")).Text;
                 price.Reduced = driver.FindElement(By.ClassName("caption")).FindElements(By.TagName("span"))[0].Text.Replace("Rabatt", "");
             }
-            storeItem.Price = price;
 
             //Image
             if (Functions.elementExistsID("dynamicImage_image_picture"))
@@ -137,7 +153,8 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             }
 
             Console.WriteLine("Description: " + Functions.FindText("pi-product-description-text"));//Short Description
-            languageContent.ShortDescription = Functions.FindText("pi-product-description-text");
+            language.ShortDescription = Functions.FindText("pi-product-description-text");
+
             Console.WriteLine("Release: " + driver.FindElement(By.Id("releaseDate-toggle-target")).FindElement(By.TagName("span")).Text);//Release
             storeItem.Release = driver.FindElement(By.Id("releaseDate-toggle-target")).FindElement(By.TagName("span")).Text;
 
@@ -145,7 +162,7 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             string[] genre;
             Console.WriteLine("Genre: " + driver.FindElement(By.Id("kategorie-toggle-target")).FindElement(By.TagName("a")).Text);
             genre = driver.FindElement(By.Id("kategorie-toggle-target")).FindElement(By.TagName("a")).Text.Split('&');
-            languageContent.Genre = genre;
+            language.Genre = genre;
 
         }
 

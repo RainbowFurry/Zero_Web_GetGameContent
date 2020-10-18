@@ -401,3 +401,27 @@
 [1018/152804.935:ERROR:exception_snapshot_win.cc(99)] thread ID 10656 not found in process
 [1018/152804.973:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
 [1018/152804.973:ERROR:exception_snapshot_win.cc(99)] thread ID 20984 not found in process
+[1018/171242.925:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[1018/171242.926:ERROR:exception_snapshot_win.cc(99)] thread ID 41468 not found in process
+[1018/171244.116:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[1018/171244.116:ERROR:exception_snapshot_win.cc(99)] thread ID 45828 not found in process
+[1018/171245.341:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[1018/171245.341:ERROR:exception_snapshot_win.cc(99)] thread ID 2620 not found in process
+[1018/171249.884:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[1018/171249.884:ERROR:exception_snapshot_win.cc(99)] thread ID 36352 not found in process
+[1018/171250.311:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[1018/171250.311:ERROR:exception_snapshot_win.cc(99)] thread ID 11772 not found in process
+[1018/171251.084:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[1018/171251.084:ERROR:exception_snapshot_win.cc(99)] thread ID 25852 not found in process
+[1018/171514.016:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[1018/171514.018:ERROR:exception_snapshot_win.cc(99)] thread ID 11140 not found in process
+[1018/171514.058:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[1018/171514.058:ERROR:exception_snapshot_win.cc(99)] thread ID 42580 not found in process
+[1018/172735.850:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[1018/172735.850:ERROR:exception_snapshot_win.cc(99)] thread ID 45856 not found in process
+[1018/172735.873:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[1018/172735.873:ERROR:exception_snapshot_win.cc(99)] thread ID 42484 not found in process
+[1018/172735.915:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[1018/172735.915:ERROR:exception_snapshot_win.cc(99)] thread ID 18056 not found in process
+[1018/172737.545:ERROR:process_reader_win.cc(123)] NtOpenThread: {Zugriff verweigert} Ein Prozess hat einen Zugriff auf ein Objekt angefordert, aber ihm wurden nicht die Rechte für den Zugriff erteilt. (0xc0000022)
+[1018/172737.545:ERROR:exception_snapshot_win.cc(99)] thread ID 31456 not found in process

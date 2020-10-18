@@ -9,18 +9,12 @@ namespace Tests.GeneralInfo
     {
 
         private static IWebDriver driver = Program.driver;
-        private static StoreItem storeItem;
-        private static LanguageContent languageContent;
+        private static ItemPrice price;
 
         public static void StartGoGTest(string searchURL)
         {
 
-            storeItem = new StoreItem();
-            languageContent = new LanguageContent();
-            storeItem.LanguageContents = new LanguageContent[10];
-
-            //ID
-            storeItem.ID = "";
+            price = new ItemPrice();
 
             Console.WriteLine("\n\n");
 
@@ -32,9 +26,7 @@ namespace Tests.GeneralInfo
 
             //Page Info From
             Console.WriteLine("GoG");
-            storeItem.InfoFrom = "GoG";
 
-            storeItem.LanguageContents[0] = languageContent;
             Console.WriteLine("\n\n");
 
             //Create DB Entry
@@ -53,10 +45,9 @@ namespace Tests.GeneralInfo
         private static void GetGameInfo()
         {
             Console.WriteLine("Name: " + Functions.FindText("productcard-basics__title"));//Name
-            storeItem.GameName = Functions.FindText("productcard-basics__title");
+            //storeItem.GameName = Functions.FindText("productcard-basics__title");
 
             //Price
-            Price price = new Price();
             if (!Functions.elementExists("product-actions-price__discount"))
             {
                 Console.WriteLine("Preis: " + Functions.FindText("product-actions-price__final-amount"));
@@ -75,7 +66,6 @@ namespace Tests.GeneralInfo
                 price.PriceNew = Functions.FindText("product-actions-price__final-amount");
                 price.Reduced = Functions.FindText("product-actions-price__discount");
             }
-            storeItem.Price = price;
 
         }
 

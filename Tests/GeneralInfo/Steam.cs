@@ -13,7 +13,6 @@ namespace TestsGeneralInfo
 
         private static IWebDriver driver = Program.driver;
         private static StoreItem storeItem;
-        private static LanguageContent languageContent;
         private static ItemPrice price;
         private static StoreItemPrice storeItemPrice;
         private static StoreItemLanguage storeItemLanguage;
@@ -23,12 +22,10 @@ namespace TestsGeneralInfo
         {
 
             storeItem = new StoreItem();
-            languageContent = new LanguageContent();
             storeItemPrice = new StoreItemPrice();
             price = new ItemPrice();
             storeItemLanguage = new StoreItemLanguage();
             language = new Language();
-            storeItem.LanguageContents = new LanguageContent[10];
 
             //ID
             storeItem.ID = Guid.NewGuid().ToString();
@@ -62,19 +59,20 @@ namespace TestsGeneralInfo
             //Category
             storeItem.Category = "Games";
 
-            storeItem.LanguageContents[0] = languageContent;
             Console.WriteLine("\n\n");
 
             //Create DB Entry
             MongoDBManager.CreateEntry("StoreItemTEMP", storeItem.ToBsonDocument());
             storeItemLanguage.language = new Language[] { language };
-            MongoDBManager.CreateEntry("StoreItemLanguageTEMP", storeItem.ToBsonDocument());
+            storeItemLanguage.PageURL = searchURL;
+            storeItemLanguage.PageName = "Steam";
+            MongoDBManager.CreateEntry("StoreItemLanguageTEMP", storeItemLanguage.ToBsonDocument());
             //MongoDBManager.CreateEntry("StoreItemDLCTEMP", storeItem.ToBsonDocument());
             //MongoDBManager.CreateEntry("StoreItemBundleTEMP", storeItem.ToBsonDocument());
             price.PageURL = searchURL;
             price.PageName = "Steam";
             storeItemPrice.price = new ItemPrice[] { price };
-            MongoDBManager.CreateEntry("StoreItemPriceTEMP", storeItem.ToBsonDocument());
+            MongoDBManager.CreateEntry("StoreItemPriceTEMP", storeItemPrice.ToBsonDocument());
 
             Thread.Sleep(2000);
 
@@ -140,7 +138,6 @@ namespace TestsGeneralInfo
                 index++;
             }
             language.GameTags = gameTag;
-            languageContent.GameTags = gameTag;
         }
 
         private static void GetGameInfo()
@@ -149,23 +146,19 @@ namespace TestsGeneralInfo
             storeItem.GameName = Functions.FindText("apphub_AppName");
 
             //Price
-            Price priceOld = new Price();
             if (Functions.elementExists("game_purchase_price"))
             {
                 if (Functions.FindText("game_purchase_price") == "Free")
                 {
                     Console.WriteLine("Preis: " + "Free");
 
-                    priceOld.Free = true;
                     price.Free = true;
                 }
                 else
                 {
                     Console.WriteLine("Preis: " + Functions.FindText("game_purchase_price"));
 
-                    priceOld.Free = false;
                     price.Free = false;
-                    priceOld.GamePrice = Functions.FindText("game_purchase_price");
                     price.GamePrice = Functions.FindText("game_purchase_price");
                 }
             }
@@ -175,21 +168,15 @@ namespace TestsGeneralInfo
                 Console.WriteLine("Price New: " + Functions.FindText("discount_final_price"));
                 Console.WriteLine("Reduce: " + Functions.FindText("discount_pct"));
 
-                priceOld.Free = false;
-                priceOld.PriceOld = Functions.FindText("discount_original_price");
-                priceOld.PriceNew = Functions.FindText("discount_final_price");
-                priceOld.Reduced = Functions.FindText("discount_pct");
                 price.Free = false;
                 price.PriceOld = Functions.FindText("discount_original_price");
                 price.PriceNew = Functions.FindText("discount_final_price");
                 price.Reduced = Functions.FindText("discount_pct");
             }
-            storeItem.Price = priceOld;
 
             Console.WriteLine("\nGame Image: " + driver.FindElement(By.ClassName("game_header_image_full")).GetAttribute("src"));
             storeItem.GameImage = driver.FindElement(By.ClassName("game_header_image_full")).GetAttribute("src");
             Console.WriteLine("Description: " + Functions.FindText("game_description_snippet"));//Short Description
-            languageContent.ShortDescription = Functions.FindText("game_description_snippet");
             language.ShortDescription = Functions.FindText("game_description_snippet");
             Console.WriteLine("Release: " + Functions.FindText("date"));//Release
             storeItem.Release = Functions.FindText("date");
@@ -231,7 +218,6 @@ namespace TestsGeneralInfo
                 genreCounter++;
             }
             language.Genre = genre;
-            languageContent.Genre = genre;
 
             //Early Access
             if (Functions.elementExists("early_access_header"))
