@@ -9,7 +9,7 @@ namespace Zero_Web_GetGameContent.Model
         public string ID { get; set; }
         public string GameName { get; set; }
         public string GameImage { get; set; }
-        public string[] GameImages { get; set; }
+        public DisplayImages[] GameImages { get; set; }
         public string Release { get; set; }
         public string[] Developer { get; set; }
         public string[] DeveloperLink { get; set; }
@@ -32,6 +32,12 @@ namespace Zero_Web_GetGameContent.Model
         public string RAM { get; set; }
         public string Storage { get; set; }
         public string DirectX { get; set; }
+    }
+
+    public class DisplayImages
+    {
+        public bool Video { get; set; }
+        public string URL { get; set; }
     }
 
 }

@@ -3,14 +3,18 @@ using OpenQA.Selenium;
 using System;
 using System.Threading;
 using Tests;
-using Zero_Web_GetGameContent.GeneralInfo;
 using Zero_Web_GetGameContent.Manager;
 using Zero_Web_GetGameContent.Model;
 
-namespace TestsGeneralInfo
+namespace Zero_Web_GetGameContent.GeneralInfo
 {
-    internal class Steam
+    public class SteamDLC
     {
+
+        public static string GetSteamDLC(string dlcURL, StoreItem mainGame)
+        {
+            return StartSteamTest(dlcURL, mainGame);
+        }
 
         private static IWebDriver driver = Program.driver;
         private static StoreItem storeItem;
@@ -18,9 +22,8 @@ namespace TestsGeneralInfo
         private static StoreItemPrice storeItemPrice;
         private static StoreItemLanguage storeItemLanguage;
         private static Language language;
-        private static StoreItemDLC storeItemDLC;
 
-        public static void StartSteamTest(string searchURL)
+        private static string StartSteamTest(string searchURL, StoreItem mainGame)
         {
 
             storeItem = new StoreItem();
@@ -28,13 +31,11 @@ namespace TestsGeneralInfo
             price = new ItemPrice();
             storeItemLanguage = new StoreItemLanguage();
             language = new Language();
-            storeItemDLC = new StoreItemDLC();
 
             //ID
             storeItem.ID = Guid.NewGuid().ToString();
             storeItemPrice.ID = storeItem.ID;
             storeItemLanguage.ID = storeItem.ID;
-            storeItemDLC.GameID = storeItem.ID;
 
             Console.WriteLine("\n\n");
 
@@ -50,14 +51,14 @@ namespace TestsGeneralInfo
             //Game Tags
             GetGameTags();
 
-            //Get Images
+            //Get GameImages
             GetDisplayImages();
 
             //Get FSK Info
             GetFSKInfo();
 
             //Game System Requirement
-            GetSystemInfo();
+            GetSystemInfo(mainGame);
 
             //Page Info From
             Console.WriteLine("Steam");
@@ -69,23 +70,18 @@ namespace TestsGeneralInfo
             Console.WriteLine("\n\n");
 
             //Create DB Entry
-            MongoDBManager.CreateEntry("StoreItemTEMP", storeItem.ToBsonDocument());
+            MongoDBManager.CreateEntry("StoreItemDLCTEMP", storeItem.ToBsonDocument());
             storeItemLanguage.language = new Language[] { language };
             storeItemLanguage.PageURL = searchURL;
             storeItemLanguage.PageName = "Steam";
-            MongoDBManager.CreateEntry("StoreItemLanguageTEMP", storeItemLanguage.ToBsonDocument());
-            //MongoDBManager.CreateEntry("StoreItemBundleTEMP", storeItem.ToBsonDocument());
+            MongoDBManager.CreateEntry("StoreItemDLCLanguageTEMP", storeItemLanguage.ToBsonDocument());
             price.PageURL = searchURL;
             price.PageName = "Steam";
             storeItemPrice.price = new ItemPrice[] { price };
-            MongoDBManager.CreateEntry("StoreItemPriceTEMP", storeItemPrice.ToBsonDocument());
-
-            //GET DLC
-            GetDLC();
-            if (storeItemDLC.DLCID != null)
-                MongoDBManager.CreateEntry("StoreItemDLCLinkerTEMP", storeItemDLC.ToBsonDocument());
+            MongoDBManager.CreateEntry("StoreItemDLCPriceTEMP", storeItemPrice.ToBsonDocument());
 
             Thread.Sleep(2000);
+            return storeItem.ID;
 
         }
 
@@ -109,91 +105,17 @@ namespace TestsGeneralInfo
 
 
 
-        private static void GetSystemInfo()
+        private static void GetSystemInfo(StoreItem mainGame)
         {
-            SystemInfo systemInfosMin = new SystemInfo();
-            SystemInfo systemInfosMax = new SystemInfo();
-
-            if (Functions.elementExists("game_area_sys_req_leftCol"))
-            {
-                IWebElement webElement = Functions.FindElement("game_area_sys_req_leftCol");
-                Console.WriteLine("Minimal System:");
-                Console.WriteLine("Betriebssystem: " + webElement.FindElements(By.TagName("li"))[0].Text);
-                Console.WriteLine("Prozessor: " + webElement.FindElements(By.TagName("li"))[1].Text);
-                Console.WriteLine("Arbeitsspeicher: " + webElement.FindElements(By.TagName("li"))[2].Text);
-                Console.WriteLine("Grafik: " + webElement.FindElements(By.TagName("li"))[3].Text);
-                Console.WriteLine("DirectX: " + webElement.FindElements(By.TagName("li"))[4].Text);
-                Console.WriteLine("Storage: " + webElement.FindElements(By.TagName("li"))[5].Text);
-
-                systemInfosMin.OS = webElement.FindElements(By.TagName("li"))[0].Text;
-                systemInfosMin.CPU = webElement.FindElements(By.TagName("li"))[1].Text;
-                systemInfosMin.RAM = webElement.FindElements(By.TagName("li"))[2].Text;
-                systemInfosMin.GPU = webElement.FindElements(By.TagName("li"))[3].Text;
-                systemInfosMin.DirectX = webElement.FindElements(By.TagName("li"))[4].Text;
-                systemInfosMin.Storage = webElement.FindElements(By.TagName("li"))[5].Text;
-
-                webElement = Functions.FindElement("game_area_sys_req_rightCol");
-                Console.WriteLine("Maximal System:");
-                Console.WriteLine("Betriebssystem: " + webElement.FindElements(By.TagName("li"))[0].Text);
-                Console.WriteLine("Prozessor: " + webElement.FindElements(By.TagName("li"))[1].Text);
-                Console.WriteLine("Arbeitsspeicher: " + webElement.FindElements(By.TagName("li"))[2].Text);
-                Console.WriteLine("Grafik: " + webElement.FindElements(By.TagName("li"))[3].Text);
-                Console.WriteLine("DirectX: " + webElement.FindElements(By.TagName("li"))[4].Text);
-                Console.WriteLine("Storage: " + webElement.FindElements(By.TagName("li"))[5].Text);
-
-                systemInfosMax.OS = webElement.FindElements(By.TagName("li"))[0].Text;
-                systemInfosMax.CPU = webElement.FindElements(By.TagName("li"))[1].Text;
-                systemInfosMax.RAM = webElement.FindElements(By.TagName("li"))[2].Text;
-                systemInfosMax.GPU = webElement.FindElements(By.TagName("li"))[3].Text;
-                systemInfosMax.DirectX = webElement.FindElements(By.TagName("li"))[4].Text;
-                systemInfosMax.Storage = webElement.FindElements(By.TagName("li"))[5].Text;
-            }
-            else
-            {
-                if (driver.FindElements(By.ClassName("game_area_sys_req")).Count >= 6)
-                {
-                    IWebElement webElement = driver.FindElements(By.ClassName("game_area_sys_req"))[0];
-                    Console.WriteLine("Minimal System:");
-                    Console.WriteLine("Betriebssystem: " + webElement.FindElements(By.TagName("li"))[0].Text);
-                    Console.WriteLine("Prozessor: " + webElement.FindElements(By.TagName("li"))[1].Text);
-                    Console.WriteLine("Arbeitsspeicher: " + webElement.FindElements(By.TagName("li"))[2].Text);
-                    Console.WriteLine("Grafik: " + webElement.FindElements(By.TagName("li"))[3].Text);
-                    Console.WriteLine("DirectX: " + webElement.FindElements(By.TagName("li"))[4].Text);
-                    Console.WriteLine("Storage: " + webElement.FindElements(By.TagName("li"))[5].Text);
-
-                    systemInfosMin.OS = webElement.FindElements(By.TagName("li"))[0].Text;
-                    systemInfosMin.CPU = webElement.FindElements(By.TagName("li"))[1].Text;
-                    systemInfosMin.RAM = webElement.FindElements(By.TagName("li"))[2].Text;
-                    systemInfosMin.GPU = webElement.FindElements(By.TagName("li"))[3].Text;
-                    systemInfosMin.DirectX = webElement.FindElements(By.TagName("li"))[4].Text;
-                    systemInfosMin.Storage = webElement.FindElements(By.TagName("li"))[5].Text;
-                }
-                else
-                {
-                    IWebElement webElement = driver.FindElements(By.ClassName("game_area_sys_req"))[0];
-                    Console.WriteLine("Minimal System:");
-                    Console.WriteLine("Betriebssystem: " + webElement.FindElements(By.TagName("li"))[0].Text);
-                    Console.WriteLine("Arbeitsspeicher: " + webElement.FindElements(By.TagName("li"))[1].Text);
-                    Console.WriteLine("Grafik: " + webElement.FindElements(By.TagName("li"))[2].Text);
-                    Console.WriteLine("Storage: " + webElement.FindElements(By.TagName("li"))[3].Text);
-
-                    systemInfosMin.OS = webElement.FindElements(By.TagName("li"))[0].Text;
-                    systemInfosMin.RAM = webElement.FindElements(By.TagName("li"))[1].Text;
-                    systemInfosMin.GPU = webElement.FindElements(By.TagName("li"))[2].Text;
-                    systemInfosMin.Storage = webElement.FindElements(By.TagName("li"))[3].Text;
-                }
-            }
-
-            storeItem.SystemInfoMin = systemInfosMin;
-            storeItem.SystemInfoMax = systemInfosMax;
-
+            storeItem.SystemInfoMin = mainGame.SystemInfoMin;
+            storeItem.SystemInfoMax = mainGame.SystemInfoMax;
         }
 
         private static void GetGameTags()
         {
             IWebElement elements = Functions.FindElement("glance_tags");
             int index = 0;
-            string[] gameTag = new string[0];
+            string[] gameTag = new string[elements.FindElements(By.ClassName("app_tag")).Count];
 
             foreach (IWebElement element in elements.FindElements(By.ClassName("app_tag")))
             {
@@ -223,7 +145,6 @@ namespace TestsGeneralInfo
 
                 }
             }
-
             language.GameTags = gameTag;
         }
 
@@ -254,20 +175,21 @@ namespace TestsGeneralInfo
             }
             else
             {
-                Console.WriteLine("Price Old: " + Functions.FindText("discount_original_price"));
-                Console.WriteLine("Price New: " + Functions.FindText("discount_final_price"));
-                Console.WriteLine("Reduce: " + Functions.FindText("discount_pct"));
+                if (Functions.elementExists("discount_original_price"))
+                {
+                    Console.WriteLine("Price Old: " + Functions.FindText("discount_original_price"));
+                    Console.WriteLine("Price New: " + Functions.FindText("discount_final_price"));
+                    Console.WriteLine("Reduce: " + Functions.FindText("discount_pct"));
 
-                price.Free = false;
-                price.PriceOld = Functions.FindText("discount_original_price");
-                price.PriceNew = Functions.FindText("discount_final_price");
-                price.Reduced = Functions.FindText("discount_pct");
+                    price.Free = false;
+                    price.PriceOld = Functions.FindText("discount_original_price");
+                    price.PriceNew = Functions.FindText("discount_final_price");
+                    price.Reduced = Functions.FindText("discount_pct");
+                }
             }
 
             Console.WriteLine("\nGame Image: " + driver.FindElement(By.ClassName("game_header_image_full")).GetAttribute("src"));
             storeItem.GameImage = driver.FindElement(By.ClassName("game_header_image_full")).GetAttribute("src");
-            Console.WriteLine("Description: " + Functions.FindText("game_description_snippet"));//Short Description
-            language.ShortDescription = Functions.FindText("game_description_snippet");
             Console.WriteLine("Release: " + Functions.FindText("date"));//Release
             storeItem.Release = Functions.FindText("date");
 
@@ -356,47 +278,6 @@ namespace TestsGeneralInfo
                 }
             }
 
-        }
-
-        private static void GetDLC()
-        {
-            if (Functions.elementExists("dlc_footer_element"))
-            {
-                driver.FindElement(By.Id("dlc_footer")).FindElements(By.ClassName("dlc_footer_element"))[0].Click();
-                Thread.Sleep(2000);
-
-                string[] dlcURL = new string[driver.FindElement(By.ClassName("gameDlcBlocks")).FindElements(By.TagName("a")).Count + driver.FindElement(By.Id("game_area_dlc_expanded")).FindElements(By.TagName("a")).Count];
-                string[] dlc = new string[driver.FindElement(By.ClassName("gameDlcBlocks")).FindElements(By.TagName("a")).Count + driver.FindElement(By.Id("game_area_dlc_expanded")).FindElements(By.TagName("a")).Count];
-
-                int counter1 = 0;
-                foreach (IWebElement element in driver.FindElement(By.ClassName("gameDlcBlocks")).FindElements(By.TagName("a")))
-                {
-                    String dlcID = element.GetAttribute("href");
-                    dlcURL[counter1] = dlcID;
-                    counter1++;
-                }
-
-                foreach (IWebElement element in driver.FindElement(By.Id("game_area_dlc_expanded")).FindElements(By.TagName("a")))
-                {
-                    String dlcID = element.GetAttribute("href");
-                    dlcURL[counter1] = dlcID;
-                    counter1++;
-                }
-
-                counter1 = 0;
-                foreach (string url in dlcURL)
-                {
-                    if (!url.Contains("Soundtrack") && url.StartsWith("http"))
-                    {
-                        String dlcID = SteamDLC.GetSteamDLC(url, storeItem);
-                        dlc[counter1] = dlcID;
-                        counter1++;
-                    }
-                }
-
-                storeItemDLC.DLCID = dlc;
-
-            }
         }
 
         private static void GetDisplayImages()

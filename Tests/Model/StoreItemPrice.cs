@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 
 namespace Zero_Web_GetGameContent.Model
 {
@@ -15,9 +16,11 @@ namespace Zero_Web_GetGameContent.Model
         public string PriceOld { get; set; }
         public string PriceNew { get; set; }
         public string Reduced { get; set; }
+        public DateTime ReducedTime { get; set; }
         public bool Free { get; set; }
         public string PageName { get; set; }
         public string PageURL { get; set; }
+        public string BuyURL { get; set; }
     }
 
 }

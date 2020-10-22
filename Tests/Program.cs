@@ -1,7 +1,9 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
+using System.IO;
 using TestsGeneralInfo;
+using Zero_Web_GetGameContent.AutoGrab;
 using Zero_Web_GetGameContent.GeneralInfo;
 using Zero_Web_GetGameContent.Manager;
 
@@ -11,6 +13,8 @@ namespace Tests
     {
 
         public static IWebDriver driver = new ChromeDriver();
+
+        private static LoadGameFile loadGameFile;
 
         private static void Main(string[] args)
         {
@@ -33,31 +37,47 @@ namespace Tests
                 //GoG.StartGoGTest("https://www.gog.com/game/cyberpunk_2077");
                 //GoG.StartGoGTest("https://www.gog.com/game/the_signifier");
 
+                loadGameFile = new LoadGameFile();
+                loadGameFile.LoadGamesFromFile();
+
                 MongoDBManager.CreateConnection();
+
                 StartStoreCreateEntrys();
 
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+
+                foreach (string url in loadGameFile.StoreItemURLs)
+                {
+                    File.AppendAllText(Environment.CurrentDirectory + "ErrorGames.txt", url);
+                }
+
             }
         }
 
         private static void StartStoreCreateEntrys()
         {
-            LoadGameFile loadGameFile = new LoadGameFile();
-            loadGameFile.LoadGamesFromFile();
-
             foreach (string StoreItemURL in loadGameFile.StoreItemURLs)
             {
-                if (StoreItemURL.StartsWith("https://store.steampowered.com/"))
+                if (StoreItemURL.StartsWith("https://store.steampowered.com/") && !StoreItemURL.Contains("search/?filter="))
                 {
-                    Steam.StartSteamTest(StoreItemURL);
+                    Steam.StartSteamTest(StoreItemURL);//STEAM STORE ITEM
                 }
                 else if (StoreItemURL.StartsWith("https://www.microsoft.com"))
                 {
-                    MicrosoftStore.StartMicrosoftStoreTest(StoreItemURL);
+                    MicrosoftStore.StartMicrosoftStoreTest(StoreItemURL);//MS STORE ITEM
                 }
+                else if (StoreItemURL.StartsWith("https://www.xbox.com/"))
+                {
+                    Xbox.StartMicrosoftStoreAutoGrab(StoreItemURL);//MS AUTOGET GAMES
+                }
+                else if (StoreItemURL.StartsWith("https://store.steampowered.com/") && StoreItemURL.Contains("search/?filter="))
+                {
+                    SteamGames.StartSteamAutoGrab(StoreItemURL);//MS AUTOGET GAMES
+                }
+                //loadGameFile.StoreItemURLs.Remove(StoreItemURL);
             }
         }
 

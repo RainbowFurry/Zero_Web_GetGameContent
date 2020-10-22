@@ -23,7 +23,8 @@ namespace Zero_Web_GetGameContent.Manager
             {
                 StoreItemURLs.Add(line);
             }
-
+            //File.Delete(filePath);
+            //File.Create(filePath);
         }
 
     }
