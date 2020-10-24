@@ -44,49 +44,55 @@ namespace TestsGeneralInfo
             //FSK Check
             CheckFSK();
 
-            //Game Info
-            GetGameInfo();
+            if (driver.FindElements(By.ClassName("apphub_AppName")).Count > 0)
+            {
+                if (!driver.FindElement(By.ClassName("apphub_AppName")).Text.Contains("Add-On"))
+                {
+                    //Game Info
+                    GetGameInfo();
 
-            //Game Tags
-            GetGameTags();
+                    //Game Tags
+                    GetGameTags();
 
-            //Get Images
-            GetDisplayImages();
+                    //Get Images
+                    GetDisplayImages();
 
-            //Get FSK Info
-            GetFSKInfo();
+                    //Get FSK Info
+                    GetFSKInfo();
 
-            //Game System Requirement
-            GetSystemInfo();
+                    //Game System Requirement
+                    GetSystemInfo();
 
-            //Page Info From
-            Console.WriteLine("Steam");
-            storeItem.InfoFrom = "Steam";
+                    //Page Info From
+                    Console.WriteLine("Steam");
+                    storeItem.InfoFrom = "Steam";
 
-            //Category
-            storeItem.Category = "Games";
+                    //Category
+                    storeItem.Category = "Games";
 
-            Console.WriteLine("\n\n");
+                    Console.WriteLine("\n\n");
 
-            //Create DB Entry
-            MongoDBManager.CreateEntry("StoreItemTEMP", storeItem.ToBsonDocument());
-            storeItemLanguage.language = new Language[] { language };
-            storeItemLanguage.PageURL = searchURL;
-            storeItemLanguage.PageName = "Steam";
-            MongoDBManager.CreateEntry("StoreItemLanguageTEMP", storeItemLanguage.ToBsonDocument());
-            //MongoDBManager.CreateEntry("StoreItemBundleTEMP", storeItem.ToBsonDocument());
-            price.PageURL = searchURL;
-            price.PageName = "Steam";
-            storeItemPrice.price = new ItemPrice[] { price };
-            MongoDBManager.CreateEntry("StoreItemPriceTEMP", storeItemPrice.ToBsonDocument());
+                    //Create DB Entry
+                    MongoDBManager.CreateEntry("StoreItemTEMP", storeItem.ToBsonDocument());
+                    storeItemLanguage.language = new Language[] { language };
+                    storeItemLanguage.PageURL = searchURL;
+                    storeItemLanguage.PageName = "Steam";
+                    MongoDBManager.CreateEntry("StoreItemLanguageTEMP", storeItemLanguage.ToBsonDocument());
+                    //MongoDBManager.CreateEntry("StoreItemBundleTEMP", storeItem.ToBsonDocument());
+                    price.PageURL = searchURL;
+                    price.PageName = "Steam";
+                    storeItemPrice.price = new ItemPrice[] { price };
+                    MongoDBManager.CreateEntry("StoreItemPriceTEMP", storeItemPrice.ToBsonDocument());
 
-            //GET DLC
-            GetDLC();
-            if (storeItemDLC.DLCID != null)
-                MongoDBManager.CreateEntry("StoreItemDLCLinkerTEMP", storeItemDLC.ToBsonDocument());
+                    //GET DLC
+                    GetDLC();
+                    if (storeItemDLC.DLCID != null)
+                        MongoDBManager.CreateEntry("StoreItemDLCLinkerTEMP", storeItemDLC.ToBsonDocument());
 
-            Thread.Sleep(2000);
+                    Thread.Sleep(2000);
 
+                }
+            }
         }
 
         private static void SearchGame(String Game)
@@ -114,7 +120,7 @@ namespace TestsGeneralInfo
             SystemInfo systemInfosMin = new SystemInfo();
             SystemInfo systemInfosMax = new SystemInfo();
 
-            if (Functions.elementExists("game_area_sys_req_leftCol"))
+            if (Functions.elementExists("game_area_sys_req_leftCol") && driver.FindElements(By.ClassName("game_area_sys_req")).Count >= 6)
             {
                 IWebElement webElement = Functions.FindElement("game_area_sys_req_leftCol");
                 Console.WriteLine("Minimal System:");
@@ -167,6 +173,13 @@ namespace TestsGeneralInfo
                     systemInfosMin.GPU = webElement.FindElements(By.TagName("li"))[3].Text;
                     systemInfosMin.DirectX = webElement.FindElements(By.TagName("li"))[4].Text;
                     systemInfosMin.Storage = webElement.FindElements(By.TagName("li"))[5].Text;
+
+                    systemInfosMax.OS = webElement.FindElements(By.TagName("li"))[0].Text;
+                    systemInfosMax.CPU = webElement.FindElements(By.TagName("li"))[1].Text;
+                    systemInfosMax.RAM = webElement.FindElements(By.TagName("li"))[2].Text;
+                    systemInfosMax.GPU = webElement.FindElements(By.TagName("li"))[3].Text;
+                    systemInfosMax.DirectX = webElement.FindElements(By.TagName("li"))[4].Text;
+                    systemInfosMax.Storage = webElement.FindElements(By.TagName("li"))[5].Text;
                 }
                 else
                 {
@@ -181,6 +194,11 @@ namespace TestsGeneralInfo
                     systemInfosMin.RAM = webElement.FindElements(By.TagName("li"))[1].Text;
                     systemInfosMin.GPU = webElement.FindElements(By.TagName("li"))[2].Text;
                     systemInfosMin.Storage = webElement.FindElements(By.TagName("li"))[3].Text;
+
+                    systemInfosMax.OS = webElement.FindElements(By.TagName("li"))[0].Text;
+                    systemInfosMax.RAM = webElement.FindElements(By.TagName("li"))[1].Text;
+                    systemInfosMax.GPU = webElement.FindElements(By.TagName("li"))[2].Text;
+                    systemInfosMax.Storage = webElement.FindElements(By.TagName("li"))[3].Text;
                 }
             }
 
@@ -266,8 +284,18 @@ namespace TestsGeneralInfo
 
             Console.WriteLine("\nGame Image: " + driver.FindElement(By.ClassName("game_header_image_full")).GetAttribute("src"));
             storeItem.GameImage = driver.FindElement(By.ClassName("game_header_image_full")).GetAttribute("src");
-            Console.WriteLine("Description: " + Functions.FindText("game_description_snippet"));//Short Description
-            language.ShortDescription = Functions.FindText("game_description_snippet");
+
+            if (driver.FindElements(By.ClassName("game_description_snippet")).Count > 0)
+            {
+                Console.WriteLine("Description: " + Functions.FindText("game_description_snippet"));//Short Description
+                language.ShortDescription = Functions.FindText("game_description_snippet");
+            }
+            else
+            {
+                Console.WriteLine("Description: " + Functions.FindText("game_area_description"));//Short Description
+                language.ShortDescription = Functions.FindText("game_area_description");
+            }
+
             Console.WriteLine("Release: " + Functions.FindText("date"));//Release
             storeItem.Release = Functions.FindText("date");
 

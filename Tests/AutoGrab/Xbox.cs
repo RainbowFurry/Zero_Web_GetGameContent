@@ -44,12 +44,17 @@ namespace Zero_Web_GetGameContent.AutoGrab
             Console.WriteLine(maxPageSize);
 
             //Foreach max Page
-            for (int i = 0; i < maxPageSize; i++)
+            for (int i = 0; i < maxPageSize - 1; i++)
             {
                 //Foreach Items
                 foreach (IWebElement element in driver.FindElement(By.ClassName("gameDivsWrapper")).FindElements(By.ClassName("m-product-placement-item")))
                 {
-                    File.AppendAllText(path, element.FindElement(By.TagName("a")).GetAttribute("href") + "\n");
+                    //Filter Bundles out
+                    if (!element.FindElement(By.ClassName("x1GameName")).Text.Contains("Bundle"))
+                    {
+                        if (!element.FindElement(By.TagName("a")).GetAttribute("href").Contains("xbox.com"))
+                            File.AppendAllText(path, element.FindElement(By.TagName("a")).GetAttribute("href") + "\n");
+                    }
                 }
 
                 Thread.Sleep(2000);

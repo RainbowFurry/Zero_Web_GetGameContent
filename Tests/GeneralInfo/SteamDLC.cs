@@ -193,6 +193,17 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             Console.WriteLine("Release: " + Functions.FindText("date"));//Release
             storeItem.Release = Functions.FindText("date");
 
+            if (driver.FindElements(By.ClassName("game_description_snippet")).Count > 0)
+            {
+                Console.WriteLine("Description: " + Functions.FindText("game_description_snippet"));//Short Description
+                language.ShortDescription = Functions.FindText("game_description_snippet");
+            }
+            else
+            {
+                Console.WriteLine("Description: " + Functions.FindText("game_area_description"));//Short Description
+                language.ShortDescription = Functions.FindText("game_area_description");
+            }
+
             //Developer
             IWebElement elementDevelopers = driver.FindElement(By.Id("developers_list"));
             int devCunter = 0;

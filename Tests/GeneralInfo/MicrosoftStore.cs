@@ -62,7 +62,7 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             Console.WriteLine("\n\n");
 
             //Create DB Entry
-            if (price.GamePrice != null || price.PriceNew != null)
+            if (price.GamePrice != null || price.PriceNew != null && driver.FindElements(By.Id("DynamicHeading_productTitle")).Count > 0)
             {
                 MongoDBManager.CreateEntry("StoreItemTEMP", storeItem.ToBsonDocument());
                 storeItemLanguage.language = new Language[] { language };
@@ -94,7 +94,7 @@ namespace Zero_Web_GetGameContent.GeneralInfo
         private static void GetSystemInfo()
         {
 
-            if (driver.FindElement(By.Id("ProductPrice_productPrice_PriceContainer")).FindElement(By.TagName("span")).Text != "Kostenlos")
+            if (driver.FindElements(By.Id("BuyBoxMessages_systemMessages_SystemRequirementsMessage_Link")).Count > 0)
             {
                 driver.FindElement(By.Id("BuyBoxMessages_systemMessages_SystemRequirementsMessage_Link")).Click();
                 Thread.Sleep(2000);
@@ -175,8 +175,11 @@ namespace Zero_Web_GetGameContent.GeneralInfo
 
         private static void GetGameInfo()
         {
-            Console.WriteLine("Name: " + driver.FindElement(By.Id("DynamicHeading_productTitle")).Text);//Name
-            storeItem.GameName = driver.FindElement(By.Id("DynamicHeading_productTitle")).Text;
+            if (driver.FindElements(By.Id("DynamicHeading_productTitle")).Count > 0)
+            {
+                Console.WriteLine("Name: " + driver.FindElement(By.Id("DynamicHeading_productTitle")).Text);//Name
+                storeItem.GameName = driver.FindElement(By.Id("DynamicHeading_productTitle")).Text;
+            }
 
             if (driver.FindElements(By.ClassName("m-product-detail-description")).Count > 0)
             {
@@ -235,10 +238,13 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             storeItem.Release = driver.FindElement(By.Id("releaseDate-toggle-target")).FindElement(By.TagName("span")).Text;
 
             //Genre
-            string[] genre;
-            Console.WriteLine("Genre: " + driver.FindElement(By.Id("kategorie-toggle-target")).FindElement(By.TagName("a")).Text);
-            genre = driver.FindElement(By.Id("kategorie-toggle-target")).FindElement(By.TagName("a")).Text.Split('&');
-            language.Genre = genre;
+            if (driver.FindElement(By.Id("kategorie-toggle-target")).FindElements(By.TagName("a")).Count > 0)
+            {
+                string[] genre;
+                Console.WriteLine("Genre: " + driver.FindElement(By.Id("kategorie-toggle-target")).FindElement(By.TagName("a")).Text);
+                genre = driver.FindElement(By.Id("kategorie-toggle-target")).FindElement(By.TagName("a")).Text.Split('&');
+                language.Genre = genre;
+            }
 
         }
 
@@ -287,7 +293,7 @@ namespace Zero_Web_GetGameContent.GeneralInfo
                 if (driver.FindElement(By.Id("addonswithdetails")).FindElements(By.ClassName("m-channel-placement")).Count > 0)
                 {
 
-                    if (driver.FindElement(By.Id("addonswithdetails")).FindElement(By.ClassName("c-heading-4")).FindElement(By.TagName("span")).Text.Contains("Add-Ons") || driver.FindElement(By.Id("addonswithdetails")).FindElement(By.ClassName("c-heading-4")).FindElement(By.TagName("span")).Text.Contains("Top-Add-Ons"))
+                    if (driver.FindElement(By.Id("addonswithdetails")).FindElement(By.ClassName("c-heading-4")).FindElement(By.TagName("span")).Text.Equals("Add-Ons") || driver.FindElement(By.Id("addonswithdetails")).FindElement(By.ClassName("c-heading-4")).FindElement(By.TagName("span")).Text.Equals("Top-Add-Ons"))
                     {
 
                         string[] dlcURL = new string[driver.FindElement(By.Id("addonswithdetails")).FindElement(By.ClassName("m-channel-placement")).FindElement(By.ClassName("c-carousel")).FindElement(By.TagName("div")).FindElement(By.TagName("ul")).FindElements(By.TagName("li")).Count];

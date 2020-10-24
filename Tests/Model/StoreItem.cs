@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace Zero_Web_GetGameContent.Model
 {
@@ -21,6 +22,7 @@ namespace Zero_Web_GetGameContent.Model
         public SystemInfo SystemInfoMin { get; set; }
         public SystemInfo SystemInfoMax { get; set; }
         public string InfoFrom { get; set; }
+        public DownloadLinks Download { get; set; }
 
     }
 
@@ -38,6 +40,21 @@ namespace Zero_Web_GetGameContent.Model
     {
         public bool Video { get; set; }
         public string URL { get; set; }
+    }
+
+    public class DownloadLinks
+    {
+        [Display(Name = "WindowsX64")]
+        public string WindowsX64 { get; set; }
+
+        [Display(Name = "WindowsX32")]
+        public string WindowsX32 { get; set; }
+
+        [Display(Name = "Linux")]
+        public string Linux { get; set; }
+
+        [Display(Name = "Mac")]
+        public string Mac { get; set; }
     }
 
 }

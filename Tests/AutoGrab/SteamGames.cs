@@ -45,7 +45,7 @@ namespace Zero_Web_GetGameContent.AutoGrab
             int currentGame = 0;
 
             //Foreach max Page
-            for (int i = 0; i < maxPageSize; i++)
+            for (int i = 0; i < maxPageSize - 1; i++)
             {
                 Thread.Sleep(2000);
                 IWebElement scroll = driver.FindElement(By.Id("search_resultsRows")).FindElements(By.TagName("a"))[driver.FindElement(By.Id("search_resultsRows")).FindElements(By.TagName("a")).Count - 1];
