@@ -16,7 +16,7 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             return StartMicrosoftTest(dlcURL, mainGame);
         }
 
-        private static IWebDriver driver = Program.driver;
+        private static readonly IWebDriver driver = Program.driver;
         private static StoreItem storeItem;
         private static ItemPrice price;
         private static StoreItemPrice storeItemPrice;
@@ -45,46 +45,51 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             //FSK Check
             CheckFSK();
 
-            //Game Info
-            GetGameInfo();
-
-            //Get Images
-            GetDisplayImages();
-
-            //Get FSK Info
-            GetFSKInfo();
-
-            //Game System Requirement
-            GetSystemInfo(mainGame);
-
-            //Page Info From
-            Console.WriteLine("Microsoft");
-            storeItem.InfoFrom = "Microsoft";
-
-            //Category
-            storeItem.Category = "Games";
-
-            Console.WriteLine("\n\n");
-
-            //Create DB Entry
-            if (price.GamePrice != null || price.PriceNew != null)
+            if (!MongoDBManager.DocumentExists("StoreItemTEMP", storeItem))
             {
-                MongoDBManager.CreateEntry("StoreItemDLCTEMP", storeItem.ToBsonDocument());
-                storeItemLanguage.language = new Language[] { language };
-                storeItemLanguage.PageURL = searchURL;
-                storeItemLanguage.PageName = "Microsoft";
-                MongoDBManager.CreateEntry("StoreItemDLCLanguageTEMP", storeItemLanguage.ToBsonDocument());
-                price.PageURL = searchURL;
-                price.PageName = "Microsoft";
-                storeItemPrice.price = new ItemPrice[] { price };
-                MongoDBManager.CreateEntry("StoreItemDLCPriceTEMP", storeItemPrice.ToBsonDocument());
 
+
+                //Game Info
+                GetGameInfo();
+
+                //Get Images
+                GetDisplayImages();
+
+                //Get FSK Info
+                GetFSKInfo();
+
+                //Game System Requirement
+                GetSystemInfo(mainGame);
+
+                //Page Info From
+                Console.WriteLine("Microsoft");
+                storeItem.InfoFrom = "Microsoft";
+
+                //Category
+                storeItem.Category = "Games";
+
+                Console.WriteLine("\n\n");
+
+                //Create DB Entry
+                if (price.GamePrice != null || price.PriceNew != null)
+                {
+                    MongoDBManager.CreateEntry("StoreItemDLCTEMP", storeItem.ToBsonDocument());
+                    storeItemLanguage.language = new Language[] { language };
+                    storeItemLanguage.PageURL = searchURL;
+                    storeItemLanguage.PageName = "Microsoft";
+                    MongoDBManager.CreateEntry("StoreItemDLCLanguageTEMP", storeItemLanguage.ToBsonDocument());
+                    price.PageURL = searchURL;
+                    price.PageName = "Microsoft";
+                    storeItemPrice.price = new ItemPrice[] { price };
+                    MongoDBManager.CreateEntry("StoreItemDLCPriceTEMP", storeItemPrice.ToBsonDocument());
+
+                    Thread.Sleep(2000);
+                    return storeItem.ID;
+                }
                 Thread.Sleep(2000);
                 return storeItem.ID;
             }
-            Thread.Sleep(2000);
-            return null;
-
+            return storeItem.ID;
         }
 
         private static void SearchGame(String Game)

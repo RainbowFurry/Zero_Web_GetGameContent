@@ -11,7 +11,7 @@ namespace Zero_Web_GetGameContent.GeneralInfo
     internal class MicrosoftStore
     {
 
-        private static IWebDriver driver = Program.driver;
+        private static readonly IWebDriver driver = Program.driver;
         private static StoreItem storeItem;
         private static ItemPrice price;
         private static StoreItemPrice storeItemPrice;
@@ -40,48 +40,52 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             //Search Game
             SearchGame(searchURL);
 
-            //Game Info
-            GetGameInfo();
-
-            //Get Images
-            GetDisplayImages();
-
-            //Get FSK Info
-            GetFSKInfo();
-
-            //Game System Requirement
-            GetSystemInfo();
-
-            //Page Info From
-            Console.WriteLine("Microsoft");
-            storeItem.InfoFrom = "Microsoft";
-
-            //Category REFERENCE!!!!!
-            storeItem.Category = "Games";
-
-            Console.WriteLine("\n\n");
-
-            //Create DB Entry
-            if (price.GamePrice != null || price.PriceNew != null && driver.FindElements(By.Id("DynamicHeading_productTitle")).Count > 0)
+            if (!MongoDBManager.DocumentExists("StoreItemTEMP", storeItem))
             {
-                MongoDBManager.CreateEntry("StoreItemTEMP", storeItem.ToBsonDocument());
-                storeItemLanguage.language = new Language[] { language };
-                storeItemLanguage.PageURL = searchURL;
-                storeItemLanguage.PageName = "MicroSoft";
-                MongoDBManager.CreateEntry("StoreItemLanguageTEMP", storeItemLanguage.ToBsonDocument());
-                //MongoDBManager.CreateEntry("StoreItemBundleTEMP", storeItem.ToBsonDocument());
-                price.PageURL = searchURL;
-                price.PageName = "MicroSoft";
-                storeItemPrice.price = new ItemPrice[] { price };
-                MongoDBManager.CreateEntry("StoreItemPriceTEMP", storeItemPrice.ToBsonDocument());
 
-                Thread.Sleep(2000);
 
-                GetDLC();
-                if (storeItemDLC.DLCID != null)
-                    MongoDBManager.CreateEntry("StoreItemDLCLinkerTEMP", storeItemDLC.ToBsonDocument());
+                //Game Info
+                GetGameInfo();
+
+                //Get Images
+                GetDisplayImages();
+
+                //Get FSK Info
+                GetFSKInfo();
+
+                //Game System Requirement
+                GetSystemInfo();
+
+                //Page Info From
+                Console.WriteLine("Microsoft");
+                storeItem.InfoFrom = "Microsoft";
+
+                //Category REFERENCE!!!!!
+                storeItem.Category = "Games";
+
+                Console.WriteLine("\n\n");
+
+                //Create DB Entry
+                if (price.GamePrice != null || price.PriceNew != null && driver.FindElements(By.Id("DynamicHeading_productTitle")).Count > 0)
+                {
+                    MongoDBManager.CreateEntry("StoreItemTEMP", storeItem.ToBsonDocument());
+                    storeItemLanguage.language = new Language[] { language };
+                    storeItemLanguage.PageURL = searchURL;
+                    storeItemLanguage.PageName = "MicroSoft";
+                    MongoDBManager.CreateEntry("StoreItemLanguageTEMP", storeItemLanguage.ToBsonDocument());
+                    //MongoDBManager.CreateEntry("StoreItemBundleTEMP", storeItem.ToBsonDocument());
+                    price.PageURL = searchURL;
+                    price.PageName = "MicroSoft";
+                    storeItemPrice.price = new ItemPrice[] { price };
+                    MongoDBManager.CreateEntry("StoreItemPriceTEMP", storeItemPrice.ToBsonDocument());
+
+                    Thread.Sleep(2000);
+
+                    GetDLC();
+                    if (storeItemDLC.DLCID != null)
+                        MongoDBManager.CreateEntry("StoreItemDLCLinkerTEMP", storeItemDLC.ToBsonDocument());
+                }
             }
-
         }
 
         private static void SearchGame(String Game)

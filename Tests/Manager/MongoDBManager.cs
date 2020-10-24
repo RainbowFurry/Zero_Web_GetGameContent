@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
+using Zero_Web_GetGameContent.Model;
 
 namespace Zero_Web_GetGameContent.Manager
 {
@@ -43,6 +44,13 @@ namespace Zero_Web_GetGameContent.Manager
                 System.Diagnostics.Debug.WriteLine("MongoDB Entry created Error!");
                 return false;
             }
+        }
+
+        public static bool DocumentExists(string collection, StoreItem storeItem)
+        {
+            var filter = Builders<StoreItem>.Filter;
+            var count = db.GetCollection<StoreItem>(collection).Find(filter.Eq(x => x.GameName, storeItem.GameName)).CountDocuments();
+            return count > 0;
         }
 
     }

@@ -16,7 +16,7 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             return StartSteamTest(dlcURL, mainGame);
         }
 
-        private static IWebDriver driver = Program.driver;
+        private static readonly IWebDriver driver = Program.driver;
         private static StoreItem storeItem;
         private static ItemPrice price;
         private static StoreItemPrice storeItemPrice;
@@ -38,52 +38,57 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             storeItemLanguage.ID = storeItem.ID;
 
             Console.WriteLine("\n\n");
-
             //Search Game
             SearchGame(searchURL);
 
             //FSK Check
             CheckFSK();
 
-            //Game Info
-            GetGameInfo();
+            if (!MongoDBManager.DocumentExists("StoreItemTEMP", storeItem))
+            {
 
-            //Game Tags
-            GetGameTags();
 
-            //Get GameImages
-            GetDisplayImages();
+                //Game Info
+                GetGameInfo();
 
-            //Get FSK Info
-            GetFSKInfo();
+                //Game Tags
+                GetGameTags();
 
-            //Game System Requirement
-            GetSystemInfo(mainGame);
+                //Get GameImages
+                GetDisplayImages();
 
-            //Page Info From
-            Console.WriteLine("Steam");
-            storeItem.InfoFrom = "Steam";
+                //Get FSK Info
+                GetFSKInfo();
 
-            //Category
-            storeItem.Category = "Games";
+                //Game System Requirement
+                GetSystemInfo(mainGame);
 
-            Console.WriteLine("\n\n");
+                //Page Info From
+                Console.WriteLine("Steam");
+                storeItem.InfoFrom = "Steam";
 
-            //Create DB Entry
-            MongoDBManager.CreateEntry("StoreItemDLCTEMP", storeItem.ToBsonDocument());
-            storeItemLanguage.language = new Language[] { language };
-            storeItemLanguage.PageURL = searchURL;
-            storeItemLanguage.PageName = "Steam";
-            MongoDBManager.CreateEntry("StoreItemDLCLanguageTEMP", storeItemLanguage.ToBsonDocument());
-            price.PageURL = searchURL;
-            price.PageName = "Steam";
-            storeItemPrice.price = new ItemPrice[] { price };
-            MongoDBManager.CreateEntry("StoreItemDLCPriceTEMP", storeItemPrice.ToBsonDocument());
+                //Category
+                storeItem.Category = "Games";
 
-            Thread.Sleep(2000);
+                Console.WriteLine("\n\n");
+
+                //Create DB Entry
+                MongoDBManager.CreateEntry("StoreItemDLCTEMP", storeItem.ToBsonDocument());
+                storeItemLanguage.language = new Language[] { language };
+                storeItemLanguage.PageURL = searchURL;
+                storeItemLanguage.PageName = "Steam";
+                MongoDBManager.CreateEntry("StoreItemDLCLanguageTEMP", storeItemLanguage.ToBsonDocument());
+                price.PageURL = searchURL;
+                price.PageName = "Steam";
+                storeItemPrice.price = new ItemPrice[] { price };
+                MongoDBManager.CreateEntry("StoreItemDLCPriceTEMP", storeItemPrice.ToBsonDocument());
+
+                Thread.Sleep(2000);
+                return storeItem.ID;
+            }
             return storeItem.ID;
-
         }
+        x
 
         private static void SearchGame(String Game)
         {

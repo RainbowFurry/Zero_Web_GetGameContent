@@ -12,7 +12,7 @@ namespace TestsGeneralInfo
     internal class Steam
     {
 
-        private static IWebDriver driver = Program.driver;
+        private static readonly IWebDriver driver = Program.driver;
         private static StoreItem storeItem;
         private static ItemPrice price;
         private static StoreItemPrice storeItemPrice;
@@ -40,7 +40,6 @@ namespace TestsGeneralInfo
 
             //Search Game
             SearchGame(searchURL);
-
             //FSK Check
             CheckFSK();
 
@@ -48,49 +47,51 @@ namespace TestsGeneralInfo
             {
                 if (!driver.FindElement(By.ClassName("apphub_AppName")).Text.Contains("Add-On"))
                 {
-                    //Game Info
-                    GetGameInfo();
+                    if (!MongoDBManager.DocumentExists("StoreItemTEMP", storeItem))
+                    {
 
-                    //Game Tags
-                    GetGameTags();
+                        //Game Info
+                        GetGameInfo();
 
-                    //Get Images
-                    GetDisplayImages();
+                        //Game Tags
+                        GetGameTags();
 
-                    //Get FSK Info
-                    GetFSKInfo();
+                        //Get Images
+                        GetDisplayImages();
 
-                    //Game System Requirement
-                    GetSystemInfo();
+                        //Get FSK Info
+                        GetFSKInfo();
 
-                    //Page Info From
-                    Console.WriteLine("Steam");
-                    storeItem.InfoFrom = "Steam";
+                        //Game System Requirement
+                        GetSystemInfo();
 
-                    //Category
-                    storeItem.Category = "Games";
+                        //Page Info From
+                        Console.WriteLine("Steam");
+                        storeItem.InfoFrom = "Steam";
 
-                    Console.WriteLine("\n\n");
+                        //Category
+                        storeItem.Category = "Games";
 
-                    //Create DB Entry
-                    MongoDBManager.CreateEntry("StoreItemTEMP", storeItem.ToBsonDocument());
-                    storeItemLanguage.language = new Language[] { language };
-                    storeItemLanguage.PageURL = searchURL;
-                    storeItemLanguage.PageName = "Steam";
-                    MongoDBManager.CreateEntry("StoreItemLanguageTEMP", storeItemLanguage.ToBsonDocument());
-                    //MongoDBManager.CreateEntry("StoreItemBundleTEMP", storeItem.ToBsonDocument());
-                    price.PageURL = searchURL;
-                    price.PageName = "Steam";
-                    storeItemPrice.price = new ItemPrice[] { price };
-                    MongoDBManager.CreateEntry("StoreItemPriceTEMP", storeItemPrice.ToBsonDocument());
+                        Console.WriteLine("\n\n");
 
-                    //GET DLC
-                    GetDLC();
-                    if (storeItemDLC.DLCID != null)
-                        MongoDBManager.CreateEntry("StoreItemDLCLinkerTEMP", storeItemDLC.ToBsonDocument());
+                        //Create DB Entry
+                        MongoDBManager.CreateEntry("StoreItemTEMP", storeItem.ToBsonDocument());
+                        storeItemLanguage.language = new Language[] { language };
+                        storeItemLanguage.PageURL = searchURL;
+                        storeItemLanguage.PageName = "Steam";
+                        MongoDBManager.CreateEntry("StoreItemLanguageTEMP", storeItemLanguage.ToBsonDocument());
+                        //MongoDBManager.CreateEntry("StoreItemBundleTEMP", storeItem.ToBsonDocument());
+                        price.PageURL = searchURL;
+                        price.PageName = "Steam";
+                        storeItemPrice.price = new ItemPrice[] { price };
+                        MongoDBManager.CreateEntry("StoreItemPriceTEMP", storeItemPrice.ToBsonDocument());
 
-                    Thread.Sleep(2000);
-
+                        //GET DLC
+                        GetDLC();
+                        if (storeItemDLC.DLCID != null)
+                            MongoDBManager.CreateEntry("StoreItemDLCLinkerTEMP", storeItemDLC.ToBsonDocument());
+                        Thread.Sleep(2000);
+                    }
                 }
             }
         }
