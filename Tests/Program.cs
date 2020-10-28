@@ -61,23 +61,51 @@ namespace Tests
         {
             foreach (string StoreItemURL in loadGameFile.StoreItemURLs)
             {
-                if (StoreItemURL.StartsWith("https://store.steampowered.com/") && !StoreItemURL.Contains("search/?filter="))
+                if (StoreItemURL.StartsWith("https://store.steampowered.com/"))
                 {
-                    Steam.StartSteamTest(StoreItemURL);//STEAM STORE ITEM
+                    SteamGame(StoreItemURL);
                 }
                 else if (StoreItemURL.StartsWith("https://www.microsoft.com"))
                 {
-                    MicrosoftStore.StartMicrosoftStoreTest(StoreItemURL);//MS STORE ITEM
+                    MicrosoftGame(StoreItemURL);
                 }
                 else if (StoreItemURL.StartsWith("https://www.xbox.com/"))
                 {
                     Xbox.StartMicrosoftStoreAutoGrab(StoreItemURL);//MS AUTOGET GAMES
                 }
-                else if (StoreItemURL.StartsWith("https://store.steampowered.com/") && StoreItemURL.Contains("search/?filter="))
-                {
-                    SteamGames.StartSteamAutoGrab(StoreItemURL);//MS AUTOGET GAMES
-                }
                 //loadGameFile.StoreItemURLs.Remove(StoreItemURL);
+            }
+        }
+
+        private static void SteamGame(string StoreItemURL)
+        {
+            if (StoreItemURL.StartsWith("https://store.steampowered.com/") && !StoreItemURL.Contains("search/?filter=") && !StoreItemURL.Contains("/genre/") && !StoreItemURL.Contains("/tags/") && !StoreItemURL.Contains("/specials"))
+            {
+                Steam.StartSteamTest(StoreItemURL);//STEAM STORE ITEM
+            }
+            else if (StoreItemURL.StartsWith("https://store.steampowered.com/") && StoreItemURL.Contains("search/?filter="))
+            {
+                SteamGames.StartSteamAutoGrab(StoreItemURL);//Steam AUTOGET GAMES
+            }
+            else if (StoreItemURL.StartsWith("https://store.steampowered.com/") && StoreItemURL.Contains("/genre/"))
+            {
+                SteamGames.StartSteamAutoGrab(StoreItemURL);//Steam AUTOGET GAMES
+            }
+            else if (StoreItemURL.StartsWith("https://store.steampowered.com/") && StoreItemURL.Contains("/tags/"))
+            {
+                SteamGames.StartSteamAutoGrab(StoreItemURL);//Steam AUTOGET GAMES
+            }
+            else if (StoreItemURL.StartsWith("https://store.steampowered.com/") && StoreItemURL.Contains("/specials"))
+            {
+                SteamGames.StartSteamAutoGrab(StoreItemURL);//Steam AUTOGET GAMES
+            }
+        }
+
+        private static void MicrosoftGame(string StoreItemURL)
+        {
+            if (StoreItemURL.StartsWith("https://www.microsoft.com"))
+            {
+                MicrosoftStore.StartMicrosoftStoreTest(StoreItemURL);//MS STORE ITEM
             }
         }
 

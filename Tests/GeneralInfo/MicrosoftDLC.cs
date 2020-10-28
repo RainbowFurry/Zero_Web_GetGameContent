@@ -45,13 +45,11 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             //FSK Check
             CheckFSK();
 
-            if (!MongoDBManager.DocumentExists("StoreItemTEMP", storeItem))
+            //Game Info
+            GetGameInfo();
+
+            if (!MongoDBManager.DocumentExists("StoreItemDLCTEMP", storeItem))
             {
-
-
-                //Game Info
-                GetGameInfo();
-
                 //Get Images
                 GetDisplayImages();
 

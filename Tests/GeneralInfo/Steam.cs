@@ -45,13 +45,14 @@ namespace TestsGeneralInfo
 
             if (driver.FindElements(By.ClassName("apphub_AppName")).Count > 0)
             {
-                if (!driver.FindElement(By.ClassName("apphub_AppName")).Text.Contains("Add-On"))
+                if (!driver.FindElement(By.ClassName("apphub_AppName")).Text.Contains("Add-On") && !driver.FindElement(By.ClassName("apphub_AppName")).Text.Contains("Soundtrack"))
                 {
+
+                    //Game Info
+                    GetGameInfo();
+
                     if (!MongoDBManager.DocumentExists("StoreItemTEMP", storeItem))
                     {
-
-                        //Game Info
-                        GetGameInfo();
 
                         //Game Tags
                         GetGameTags();

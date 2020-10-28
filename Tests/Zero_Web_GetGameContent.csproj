@@ -7,6 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Backup.txt" />
+    <None Remove="netcoreapp3.1NewGamesToLoadMicroSoft.txt" />
+    <None Remove="netcoreapp3.1NewGamesToLoadSteam.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Backup.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="netcoreapp3.1NewGamesToLoadMicroSoft.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="netcoreapp3.1NewGamesToLoadSteam.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MongoDB.Bson" Version="2.11.3" />
     <PackageReference Include="MongoDB.Driver" Version="2.11.3" />
     <PackageReference Include="Selenium.Chrome.WebDriver" Version="85.0.0" />

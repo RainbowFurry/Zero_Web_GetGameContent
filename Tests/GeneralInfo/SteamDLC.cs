@@ -44,13 +44,12 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             //FSK Check
             CheckFSK();
 
-            if (!MongoDBManager.DocumentExists("StoreItemTEMP", storeItem))
+            //Game Info
+            GetGameInfo();
+
+
+            if (!MongoDBManager.DocumentExists("StoreItemDLCTEMP", storeItem))
             {
-
-
-                //Game Info
-                GetGameInfo();
-
                 //Game Tags
                 GetGameTags();
 
@@ -88,7 +87,7 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             }
             return storeItem.ID;
         }
-        x
+
 
         private static void SearchGame(String Game)
         {

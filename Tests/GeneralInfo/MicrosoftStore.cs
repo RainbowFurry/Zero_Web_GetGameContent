@@ -40,13 +40,12 @@ namespace Zero_Web_GetGameContent.GeneralInfo
             //Search Game
             SearchGame(searchURL);
 
+            //Game Info
+            GetGameInfo();
+
+
             if (!MongoDBManager.DocumentExists("StoreItemTEMP", storeItem))
             {
-
-
-                //Game Info
-                GetGameInfo();
-
                 //Get Images
                 GetDisplayImages();
 
